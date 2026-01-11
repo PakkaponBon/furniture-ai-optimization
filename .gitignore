@@ -1,0 +1,19 @@
+# --- Frontend (Next.js) ---
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env.local
+frontend/.DS_Store
+
+# --- Backend (Python) ---
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/db.sqlite3
+
+# --- General ---
+.vscode/
+.idea/
+*.log
