@@ -55,6 +55,7 @@ def calculate_wood(
     # คำนวณ % การสูญเสีย (Waste)
     total_sheet_area = sheets_needed * sheet_area
     waste_percent = ((total_sheet_area - total_used_area) / total_sheet_area) * 100
+    yield_rate = 100 - waste_percent
 
     # 2. บันทึกข้อมูล
     new_order = models.Order(
@@ -74,8 +75,9 @@ def calculate_wood(
         "input": {"width": width, "length": length, "height": height},
         "usage": {
             "total_area": round(total_used_area, 2),
-            "sheets_needed": sheets_needed, # ไฮไลท์สำคัญ
-            "waste_percent": round(waste_percent, 2)
+            "sheets_needed": sheets_needed,
+            "waste_percent": round(waste_percent, 2),
+            "yield_rate": round(yield_rate, 2) # <--- ส่งค่านี้เพิ่มไป
         },
         "note": "Optimization Calculation Complete"
     }

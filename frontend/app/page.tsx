@@ -24,6 +24,7 @@ interface CalculationResult {
     total_area: number;
     sheets_needed: number;
     waste_percent: number;
+    yield_rate: number;
   };
 }
 
@@ -82,13 +83,14 @@ export default function Home() {
             <LayoutDashboard size={24} />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Furniture OS</h1>
-            <p className="text-xs text-slate-500">Smart Cutting Plan Optimization</p>
+            {/* เปลี่ยนชื่อให้ตรง Resume */}
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+              AI-Driven Furniture Design System
+            </h1>
+            <p className="text-xs text-slate-500">Parametric Design & Material Optimization</p>
           </div>
         </div>
-        <div className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-          v1.0.0 (Demo Build)
-        </div>
+        {/* ... */}
       </nav>
 
       <main className="max-w-7xl mx-auto p-6">
@@ -169,26 +171,28 @@ export default function Home() {
             {/* Result Card */}
             {result && result.usage && (
               <div className="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden animate-fade-in-up">
-                <div className="bg-emerald-50 px-6 py-3 border-b border-emerald-100 flex items-center gap-2">
+                 <div className="bg-emerald-50 px-6 py-3 border-b border-emerald-100 flex items-center gap-2">
                   <CheckCircle2 size={18} className="text-emerald-600" />
                   <h2 className="font-semibold text-emerald-800">ผลการวิเคราะห์ (Analysis)</h2>
-                </div>
+                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                      <p className="text-xs text-slate-500 mb-1">พื้นที่ผิวรวม</p>
-                      <p className="text-lg font-bold text-slate-800">{result.usage.total_area} <span className="text-xs font-normal text-slate-400">ตร.ม.</span></p>
+                    {/* โชว์ Yield Rate (ประสิทธิภาพ) */}
+                    <div className="p-3 bg-emerald-100 rounded-lg border border-emerald-200">
+                      <p className="text-xs text-emerald-600 mb-1 font-semibold">Yield Rate (ประสิทธิภาพ)</p>
+                      <p className="text-lg font-bold text-emerald-700">{result.usage.yield_rate}%</p>
                     </div>
+                    {/* โชว์ Waste (ของเสีย) */}
                     <div className="p-3 bg-red-50 rounded-lg border border-red-100">
-                      <p className="text-xs text-red-500 mb-1">ของเสีย (Waste)</p>
+                      <p className="text-xs text-red-500 mb-1">Waste (ของเสีย)</p>
                       <p className="text-lg font-bold text-red-600">{result.usage.waste_percent}%</p>
                     </div>
                   </div>
                   
-                  <div className="bg-slate-900 rounded-lg p-4 text-center text-white">
-                    <p className="text-sm text-slate-400 mb-1">ต้องใช้ไม้อัด (1.2 x 2.4m)</p>
-                    <p className="text-3xl font-bold text-emerald-400">{result.usage.sheets_needed} <span className="text-lg font-normal text-white">แผ่น</span></p>
-                  </div>
+                 <div className="bg-slate-900 rounded-lg p-4 text-center text-white">
+                    <p className="text-sm text-slate-400 mb-1">Plywood Sheets Needed (1.2x2.4m)</p>
+                    <p className="text-3xl font-bold text-emerald-400">{result.usage.sheets_needed} <span className="text-lg font-normal text-white">Sheets</span></p>
+                 </div>
                 </div>
               </div>
             )}
