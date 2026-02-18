@@ -1,20 +1,20 @@
 from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware # <--- 1. เพิ่มบรรทัดนี้
-from sqlalchemy.orm import Session # <--- เพิ่ม Session
-from database import SessionLocal, engine # <--- import ตัวเชื่อมต่อที่เราเพิ่งเขียน
-import models # <--- import ตารางข้อมูล
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine
+import models
 import math
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# <--- 2. เพิ่มบล็อกนี้ เพื่ออนุญาตให้ Frontend (Port 3000) เข้าถึงได้
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], # อนุญาตเฉพาะเว็บเรา
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"], # อนุญาตทุกคำสั่ง (GET, POST, etc.)
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -29,7 +29,7 @@ def get_db():
 def read_root():
     return {"message": "Hello from Denso Project Backend!", "status": "Ready"}
 
-# แก้ไขฟังก์ชันคำนวณ ให้บันทึกลง Database ด้วย
+
 @app.post("/calculate-wood")
 def calculate_wood(
     width: float, 
@@ -37,8 +37,7 @@ def calculate_wood(
     height: float,
     db: Session = Depends(get_db)
 ):
-    # 1. Logic การคำนวณวัสดุจริง (Engineering Logic)
-    # สมมติขนาดไม้อัดมาตรฐาน (Plywood Sheet) = 1.2m x 2.4m
+
     sheet_width = 1.2
     sheet_length = 2.4
     sheet_area = sheet_width * sheet_length # 2.88 ตร.ม. ต่อแผ่น
@@ -49,10 +48,10 @@ def calculate_wood(
     
     total_used_area = top_area + leg_area
     
-    # ต้องใช้ไม้กี่แผ่น? (ปัดเศษขึ้นเสมอ)
+    # ต้องใช้ไม้กี่แผ่น?
     sheets_needed = math.ceil(total_used_area / sheet_area)
     
-    # คำนวณ % การสูญเสีย (Waste)
+    # คำนวณ % การสูญเสีย
     total_sheet_area = sheets_needed * sheet_area
     waste_percent = ((total_sheet_area - total_used_area) / total_sheet_area) * 100
     yield_rate = 100 - waste_percent
@@ -77,12 +76,11 @@ def calculate_wood(
             "total_area": round(total_used_area, 2),
             "sheets_needed": sheets_needed,
             "waste_percent": round(waste_percent, 2),
-            "yield_rate": round(yield_rate, 2) # <--- ส่งค่านี้เพิ่มไป
+            "yield_rate": round(yield_rate, 2)
         },
         "note": "Optimization Calculation Complete"
     }
 @app.get("/orders")
 def read_orders(db: Session = Depends(get_db)):
-    # สั่งให้ Database ไปดึงข้อมูลในตาราง Order มาทั้งหมด
     all_orders = db.query(models.Order).all()
     return all_orders
